@@ -181,11 +181,26 @@ const publishMeeting = async () => {
     }
 
     if (slotsToInsert.length > 0) {
-      const { error: slotsError } = await client
+      const { data: createdSlots, error: slotsError } = await client
         .from('meeting_slots')
         .insert(slotsToInsert)
+        .select()
       
       if (slotsError) throw slotsError
+
+      // 3. Auto-join for host
+      if (createdSlots && createdSlots.length > 0 && user.value?.id) {
+        const availabilitiesToInsert = createdSlots.map((slot: any) => ({
+          meeting_slot_id: slot.id,
+          user_id: user.value!.id
+        }))
+
+        const { error: availError } = await client
+          .from('availabilities')
+          .insert(availabilitiesToInsert)
+        
+        if (availError) throw availError
+      }
     }
 
     router.push(`/meeting/${meeting.id}`)

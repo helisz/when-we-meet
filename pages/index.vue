@@ -9,14 +9,30 @@
       <form @submit.prevent="login" class="space-y-4">
         <div>
           <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
-          <input
-            id="username"
-            v-model="username"
-            type="text"
-            required
-            class="w-full px-4 py-2 mt-1 text-white bg-gray-900 border border-gray-600 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
-            placeholder="Enter your name"
-          />
+          <div class="relative">
+            <input
+              id="username"
+              v-model="username"
+              type="text"
+              required
+              autocomplete="off"
+              class="w-full px-4 py-2 mt-1 text-white bg-gray-900 border border-gray-600 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
+              placeholder="Enter your name"
+              @input="onInput"
+              @focus="onInput"
+              @blur="hideSuggestions"
+            />
+            <ul v-if="suggestions.length > 0" class="absolute z-10 w-full bg-gray-800 border border-gray-600 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg">
+              <li
+                v-for="s in suggestions"
+                :key="s.id"
+                @click="selectUser(s)"
+                class="px-4 py-2 hover:bg-gray-700 cursor-pointer text-white"
+              >
+                {{ s.username }}
+              </li>
+            </ul>
+          </div>
         </div>
 
         <button
@@ -36,8 +52,38 @@
 const client = useSupabaseClient()
 const user = useUser()
 const username = ref('')
+const suggestions = ref<any[]>([])
 const loading = ref(false)
 const router = useRouter()
+let debounceTimer: any = null
+
+const onInput = () => {
+  if (debounceTimer) clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(async () => {
+    if (username.value.length < 1) {
+      suggestions.value = []
+      return
+    }
+    const { data } = await client
+      .from('users')
+      .select('id, username')
+      .ilike('username', `%${username.value}%`)
+      .limit(5)
+    
+    suggestions.value = data || []
+  }, 300)
+}
+
+const selectUser = (u: any) => {
+  username.value = u.username
+  suggestions.value = []
+}
+
+const hideSuggestions = () => {
+  setTimeout(() => {
+    suggestions.value = []
+  }, 200)
+}
 
 const login = async () => {
   if (!username.value.trim()) return

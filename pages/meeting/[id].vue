@@ -119,6 +119,17 @@
       <!-- Suggestion Box -->
       <div class="mt-12 bg-gray-800 p-6 rounded-lg border border-gray-700">
         <h3 class="text-lg font-bold text-white mb-4">Can't make it?</h3>
+        
+        <div v-if="suggestions.length > 0" class="mb-6 space-y-4">
+          <div v-for="s in suggestions" :key="s.id" class="bg-gray-900 p-4 rounded border border-gray-600">
+            <div class="flex justify-between items-start mb-2">
+              <div class="font-medium text-emerald-400">{{ s.user?.username }}</div>
+              <div class="text-xs text-gray-500">{{ format(new Date(s.created_at), 'MMM d, HH:mm') }}</div>
+            </div>
+            <p class="text-gray-300 text-sm whitespace-pre-wrap">{{ s.suggestion }}</p>
+          </div>
+        </div>
+
         <div class="flex gap-4">
           <button @click="showSuggestionModal = true" class="text-emerald-500 hover:text-emerald-400 font-medium">
             Suggest another date
@@ -158,6 +169,7 @@ const loading = ref(true)
 const meeting = ref<any>(null)
 const slots = ref<any[]>([])
 const availabilities = ref<any[]>([])
+const suggestions = ref<any[]>([])
 const viewMode = ref<'vote' | 'result'>('vote')
 const showSuggestionModal = ref(false)
 const suggestionText = ref('')
@@ -289,21 +301,20 @@ const toggleVote = async (slotId: string) => {
 const submitSuggestion = async () => {
   if (!suggestionText.value.trim()) return
   
-  // Just alert for now as we didn't define a suggestions table, but I can add one.
-  // Or just save to a 'suggestions' table.
-  // Let's assume we have one.
   try {
-    await client.from('suggestions').insert({
+    const { data, error } = await client.from('suggestions').insert({
       meeting_id: meetingId,
       user_id: user.value?.id,
       suggestion: suggestionText.value
-    })
-    alert('Suggestion sent!')
+    }).select('*, user:users(*)').single()
+
+    if (error) throw error
+    
+    suggestions.value.unshift(data)
     showSuggestionModal.value = false
     suggestionText.value = ''
-  } catch (e) {
-    alert('Suggestion sent (simulated)!')
-    showSuggestionModal.value = false
+  } catch (e: any) {
+    alert('Error sending suggestion: ' + e.message)
   }
 }
 
@@ -341,6 +352,16 @@ const fetchData = async () => {
       if (availError) throw availError
       availabilities.value = availData
     }
+
+    // Fetch Suggestions
+    const { data: suggestionsData, error: suggestionsError } = await client
+      .from('suggestions')
+      .select('*, user:users(*)')
+      .eq('meeting_id', meetingId)
+      .order('created_at', { ascending: false })
+
+    if (suggestionsError) throw suggestionsError
+    suggestions.value = suggestionsData
   } catch (e) {
     console.error(e)
   } finally {

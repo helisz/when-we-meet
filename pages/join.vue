@@ -2,7 +2,7 @@
   <div class="container mx-auto px-4 py-8 max-w-4xl">
     <div class="mb-8">
       <NuxtLink to="/dashboard" class="text-emerald-500 hover:text-emerald-400 mb-4 inline-block">&larr; Back to Dashboard</NuxtLink>
-      <h1 class="text-3xl font-bold text-white">Join a Meeting</h1>
+      <h1 class="text-3xl font-bold text-white">Browse & Join a Meeting</h1>
     </div>
 
     <div v-if="loading" class="text-center py-12 text-gray-400">

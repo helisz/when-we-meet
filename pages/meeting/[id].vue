@@ -371,6 +371,8 @@ const fetchData = async () => {
 
 onMounted(() => {
   if (!user.value) {
+    // Store the meeting ID to redirect back after login
+    localStorage.setItem('redirectAfterLogin', route.fullPath)
     router.push('/')
     return
   }

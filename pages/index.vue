@@ -117,7 +117,13 @@ const login = async () => {
       localStorage.setItem('user', JSON.stringify(user.value))
     }
     
-    router.push('/dashboard')
+    const redirect = localStorage.getItem('redirectAfterLogin')
+    if (redirect) {
+      localStorage.removeItem('redirectAfterLogin')
+      router.push(redirect)
+    } else {
+      router.push('/dashboard')
+    }
   } catch (e: any) {
     alert('Error: ' + e.message)
   } finally {

@@ -43,6 +43,7 @@ onMounted(() => {
 
 const logout = () => {
   user.value = null
+  localStorage.removeItem('user')
   router.push('/')
 }
 </script>

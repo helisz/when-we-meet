@@ -113,6 +113,10 @@ const login = async () => {
       user.value = newUser
     }
     
+    if (user.value) {
+      localStorage.setItem('user', JSON.stringify(user.value))
+    }
+    
     router.push('/dashboard')
   } catch (e: any) {
     alert('Error: ' + e.message)
@@ -120,4 +124,10 @@ const login = async () => {
     loading.value = false
   }
 }
+
+onMounted(() => {
+  if (user.value) {
+    router.push('/dashboard')
+  }
+})
 </script>

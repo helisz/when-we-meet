@@ -118,8 +118,12 @@
 
       <!-- Suggestion Box -->
       <div class="mt-12 bg-gray-800 p-6 rounded-lg border border-gray-700">
-        <h3 class="text-lg font-bold text-white mb-4">Can't make it?</h3>
-        
+        <h3 class="text-lg font-bold text-white mb-2">Can't make it?</h3>
+        <div class="flex gap-4 mb-4">
+          <button @click="showSuggestionModal = true" class="text-emerald-500 hover:text-emerald-400 font-medium">
+            Suggest another date
+          </button>
+        </div>
         <div v-if="suggestions.length > 0" class="mb-6 space-y-4">
           <div v-for="s in suggestions" :key="s.id" class="bg-gray-900 p-4 rounded border border-gray-600">
             <div class="flex justify-between items-start mb-2">
@@ -130,11 +134,7 @@
           </div>
         </div>
 
-        <div class="flex gap-4">
-          <button @click="showSuggestionModal = true" class="text-emerald-500 hover:text-emerald-400 font-medium">
-            Suggest another date
-          </button>
-        </div>
+        
       </div>
     </div>
 

@@ -5,20 +5,20 @@
     <div v-else>
       <div class="mb-8">
         <NuxtLink to="/join" class="text-emerald-500 hover:text-emerald-400 mb-4 inline-block">&larr; Back to List</NuxtLink>
-        <div class="flex justify-between items-start">
+        <div class="flex justify-between items-start gap-4 ">
           <div>
             <h1 class="text-3xl font-bold text-white mb-2">{{ meeting.title }}</h1>
             <p class="text-gray-400 whitespace-pre-wrap">{{ meeting.description }}</p>
           </div>
-          <div class="text-right flex flex-col items-end gap-2">
+          <div class="text-right flex flex-col p-2 gap-2 items-end bg-gray-800 rounded-lg border border-gray-700" style="min-width: 200px;">
             <div>
-              <div class="text-sm text-gray-500">Hosted by</div>
-              <div class="font-medium text-emerald-400">{{ meeting.host?.username }}</div>
+              <span class="text-sm text-gray-500">Hosted by: </span>
+              <span class="font-medium text-emerald-400">{{ meeting.host?.username }}</span>
             </div>
             <button
               v-if="isHost"
               @click="deleteMeeting"
-              class="text-red-500 hover:text-red-400 text-sm underline"
+              class="text-red-500 hover:text-red-400 text-sm"
             >
               Delete Meeting
             </button>

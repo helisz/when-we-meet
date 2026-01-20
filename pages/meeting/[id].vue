@@ -293,9 +293,9 @@
             type="date"
             v-model="newSlotDate"
             :min="minDate"
+            @input="validateDateInput"
             class="w-full px-4 py-2 bg-gray-900 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500 outline-none"
           />
-          <p class="text-xs text-gray-500 mt-1">Past dates are disabled</p>
         </div>
 
         <!-- Time Selection -->
@@ -434,6 +434,29 @@ const toggleTimeSelection = (time: string) => {
     selectedTimes.value.push(time);
   } else {
     selectedTimes.value.splice(index, 1);
+  }
+};
+
+const validateDateInput = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  let value = input.value;
+  // If empty, do nothing
+  if (!value) return;
+  
+  // Check if year part has more than 4 digits
+  // Date format is YYYY-MM-DD
+  const parts = value.split('-');
+  if (parts.length >= 1) {
+    const year = parts[0];
+    if (year && year.length > 4) {
+      // Truncate to first 4 digits
+      parts[0] = year.substring(0, 4);
+      // Reconstruct date string
+      const newValue = parts.join('-');
+      // Update the input value
+      input.value = newValue;
+      newSlotDate.value = newValue;
+    }
   }
 };
 

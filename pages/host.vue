@@ -5,7 +5,7 @@
       <h1 class="text-3xl font-bold text-white">Host a Meeting</h1>
     </div>
 
-    <form @submit.prevent="publishMeeting" class="space-y-8">
+    <form @submit.prevent="publishMeeting" novalidate class="space-y-8">
       <!-- Title -->
       <div class="bg-gray-800 p-6 rounded-lg border border-gray-700">
         <label class="block text-sm font-medium text-gray-300 mb-2">Meeting Title</label>
@@ -104,9 +104,9 @@ const selectedDates = ref<Date[]>([])
 const selectedSlots = ref<Record<string, string[]>>({})
 
 const timeSlots = [
-  { id: '09:30', label: '09:30 - 10:30' },
-  { id: '10:30', label: '10:30 - 11:30' },
-  { id: '11:30', label: '11:30 - 12:30' },
+  { id: '09:00', label: '09:00 - 10:00' },
+  { id: '10:00', label: '10:00 - 11:00' },
+  { id: '11:00', label: '11:00 - 12:00' },
   { id: '14:30', label: '14:30 - 15:30' },
   { id: '15:30', label: '15:30 - 16:30' },
   { id: '16:30', label: '16:30 - 17:30' },
@@ -138,7 +138,10 @@ const toggleSlot = (date: Date, slotId: string) => {
 }
 
 const publishMeeting = async () => {
-  if (!form.title.trim()) return
+  if (!form.title.trim()) {
+    alert('Please enter a meeting title.')
+    return
+  }
   if (selectedDates.value.length === 0) {
     alert('Please select at least one date.')
     return
@@ -213,6 +216,7 @@ const publishMeeting = async () => {
 
 onMounted(() => {
   if (!user.value) {
+    // Ensure user is created before hosting
     router.push('/')
   }
 })

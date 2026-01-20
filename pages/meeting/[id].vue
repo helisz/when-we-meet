@@ -129,7 +129,7 @@
               :key="slot.id"
               class="flex items-center justify-between group"
             >
-              <div class="flex items-center space-x-2 w-24">
+              <div class="flex items-center space-x-2 w-30">
                 <div class="text-gray-300 text-sm font-medium">
                   {{ formatTime(slot.time_slot) }}
                 </div>
@@ -369,20 +369,18 @@ const suggestionText = ref("");
 const showAddSlotModal = ref(false);
 const newSlotDate = ref("");
 const selectedTimes = ref<string[]>([]);
-const timeOptions = [
-  "09:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "14:00",
-  "15:00",
-  "16:00",
-  "17:00",
-  "18:00",
-  "19:00",
-  "20:00",
+// Define time slots matching the host page
+const timeSlots = [
+  { id: '09:00', label: '09:00 - 10:00' },
+  { id: '10:00', label: '10:00 - 11:00' },
+  { id: '11:00', label: '11:00 - 12:00' },
+  { id: '14:30', label: '14:30 - 15:30' },
+  { id: '15:30', label: '15:30 - 16:30' },
+  { id: '16:30', label: '16:30 - 17:30' },
 ];
+
+// Time options for the modal (just the IDs)
+const timeOptions = timeSlots.map(slot => slot.id);
 
 // Computed properties
 const minDate = computed(() => {
@@ -416,6 +414,13 @@ const isDatePast = (date: string) => {
 };
 
 const formatTimeDisplay = (time: string) => {
+  // Find the matching time slot to get the range label
+  const slot = timeSlots.find(s => s.id === time);
+  if (slot) {
+    return slot.label;
+  }
+  
+  // Fallback: convert to AM/PM format
   const [h, m] = time.split(":");
   const hour = parseInt(h || "0");
   const ampm = hour >= 12 ? "PM" : "AM";
@@ -459,7 +464,13 @@ const groupedSlots = computed(() => {
 });
 
 const formatTime = (time: string) => {
-  // Simple formatter, assuming HH:mm format
+  // Find the matching time slot to get the range label
+  const slot = timeSlots.find(s => s.id === time);
+  if (slot) {
+    return slot.label;
+  }
+  
+  // Fallback: convert to AM/PM format
   const [h, m] = time.split(":");
   const hour = parseInt(h || "0");
   const ampm = hour >= 12 ? "PM" : "AM";

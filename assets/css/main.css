@@ -5,3 +5,14 @@
 body {
   @apply bg-gray-900 text-white;
 }
+
+/* Style date picker icon to be white */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+input[type="date"]::-moz-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}

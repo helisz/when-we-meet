@@ -1,8 +1,24 @@
 <template>
   <div class="container mx-auto px-4 py-12">
     <div class="flex justify-between items-center mb-12">
-      <h1 class="text-2xl font-bold text-white">Welcome, {{ user?.username }}</h1>
-      <button @click="logout" class="text-sm text-gray-400 hover:text-white">Change User</button>
+      <div>
+
+        <h2 class="text-3xl font-bold text-white">WWM</h2>
+        <p class="text-gray-400">When We Meeting?</p>
+      </div>
+      <div class="text-right"> 
+        <div>{{ user?.username }}</div>
+        <button @click="logout" class="text-sm text-emerald-500 hover:text-emerald-400">Change User</button>
+      </div>     
+    </div>
+    <div class="text-center pt-10 ">
+        <h1 class="text-5xl font-bold text-emerald-500">
+          Sync. Click. Meet.
+        </h1>
+    </div>
+    
+    <div class="text-center py-8 grid gap-8 max-w-3xl mx-auto mb-8">
+        <p class="text-gray-400">Tired of endless emails just to find a meeting time? With our smart scheduling tool, you can propose, confirm, and sync meetings in seconds. Simply share your availability, let others choose, and watch your calendar fill effortlessly.</p>
     </div>
 
     <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -27,6 +43,12 @@
         <h2 class="text-2xl font-bold text-white mb-4 group-hover:text-blue-400 transition-colors">Browse & Join a meeting</h2>
         <p class="text-gray-400">View available meetings, vote on times, and see who's attending.</p>
       </NuxtLink>
+    </div>
+   <div class="text-center py-8 gap-8 max-w-3xl mx-auto mb-8 mt-6">
+        <span class="text-gray-400">Love from Chris He, created with </span>
+        <a href="https://vercel.com/" class="text-emerald-500 hover:text-emerald-400" target="_blank">Vercel</a>
+        <span class="text-gray-400"> and </span>
+        <a href="https://supabase.com/" class="text-emerald-500 hover:text-emerald-400" target="_blank">Supabase</a>.
     </div>
   </div>
 </template>

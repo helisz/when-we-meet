@@ -13,7 +13,7 @@
     </div>
     <div class="text-center pt-10 ">
         <h1 class="text-5xl font-bold text-emerald-500">
-          Sync. Click. Meet.
+          Sync. Click. Meet！
         </h1>
     </div>
     
